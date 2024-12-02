@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">BankIT</string>
+
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+
+    <string name="enter_email">Enter your email</string>
+    <string name="enter_password">Enter your password</string>
+
+    <string name="forgot_password">Forgot password?</string>
+
+    <string name="login_desc">Don\'t have an account?</string>
+    <string name="register_desc">Already have an account?</string>
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <string name="invalid_email">Invalid Email!</string>
+    <string name="invalid_username">Invalid Username!</string>
+    <string name="invalid_password">Password length at least 8 characters!</string>
+    <string name="invalid_password_match">Password and Confirm Password doesn\'t match!</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_analytics">Analytics</string>
+    <string name="title_profile">Profile</string>
+
+    <string name="title_starter">Starter</string>
+    <string name="title_login">Login</string>
+    <string name="title_register">Register</string>
+    <string name="balance_home">Balance</string>
+
+    <string name="expenses_home">Expense</string>
+    <string name="incomes_home">Income</string>
+    <string name="transactions_home">Transactions</string>
+    <string name="add_income">Add Income</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="amount">Amount</string>
+    <string name="category">Category</string>
+    <string name="save">Save</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="note">Note</string>
+    <string name="receipt">Receipt</string>
+    <string name="total_analytics">Total</string>
+    <string name="dummy_name">Charlotte Reem</string>
+    <string name="username_all_caps">USERNAME</string>
+    <string name="email_all_caps">EMAIL</string>
+    <string name="password_all_caps">PASSWORD</string>
+    <string name="night_mode">NIGHT MODE</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="old_password_all_caps">OLD PASSWORD</string>
+    <string name="new_password_all_caps">NEW PASSWORD</string>
+    <string name="confirm_new_password_all_caps">CONFIRM NEW PASSWORD</string>
+    <string name="select_date_range">Select Date Range</string>
+    <string name="scan_receipt">Scan Receipt</string>
+    <string name="photo_from_gallery">Photo from Gallery</string>
+    <string name="expense_detail">Expense Detail</string>
+    <string name="total_amount">Total Amount</string>
+</resources>
