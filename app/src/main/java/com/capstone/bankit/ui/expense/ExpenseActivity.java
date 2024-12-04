@@ -1,14 +1,6 @@
 package com.capstone.bankit.ui.expense;
 
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_INSURANCE;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_MARKETING;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_PAYROLL;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_RENT;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_SERVICES;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_SUPPLIES;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_TRAVEL;
-import static com.capstone.bankit.utils.Constants.TRANSACTION_TYPE_UTILITIES;
-import static com.capstone.bankit.utils.Constants.transactionTypes;
+import static com.capstone.bankit.utils.Constants.expensesTypes;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -23,9 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -40,7 +30,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.capstone.bankit.databinding.ActivityExpenseBinding;
 import com.capstone.bankit.ui.customview.ReceiptBottomSheetFragment;
 import com.capstone.bankit.ui.expensedetail.ExpenseDetailActivity;
-import com.capstone.bankit.ui.main.MainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -137,7 +126,7 @@ public class ExpenseActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                transactionTypes
+                expensesTypes
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerCategory.setAdapter(adapter);

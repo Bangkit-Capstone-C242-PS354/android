@@ -1,21 +1,15 @@
 package com.capstone.bankit.ui.income;
 
-import static com.capstone.bankit.utils.Constants.transactionTypes;
+import static com.capstone.bankit.utils.Constants.expensesTypes;
+import static com.capstone.bankit.utils.Constants.incomeTypes;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.capstone.bankit.R;
 import com.capstone.bankit.databinding.ActivityIncomeBinding;
-import com.capstone.bankit.ui.main.MainActivity;
 
 import java.util.Calendar;
 
@@ -55,7 +49,7 @@ public class IncomeActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                transactionTypes
+                incomeTypes
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerCategory.setAdapter(adapter);
