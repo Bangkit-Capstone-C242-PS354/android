@@ -23,6 +23,17 @@ public class Constants {
     public static final String TRANSACTION_TYPE_RENT = "RENT";
     public static final String TRANSACTION_TYPE_SERVICES = "SERVICES";
 
+    public static String[] transactionTypes = {
+            TRANSACTION_TYPE_PAYROLL,
+            TRANSACTION_TYPE_UTILITIES,
+            TRANSACTION_TYPE_INSURANCE,
+            TRANSACTION_TYPE_TRAVEL,
+            TRANSACTION_TYPE_MARKETING,
+            TRANSACTION_TYPE_SUPPLIES,
+            TRANSACTION_TYPE_RENT,
+            TRANSACTION_TYPE_SERVICES
+    };
+
     public static final String FLAG_EXPENSE = "EXPENSE";
     public static final String FLAG_INCOME = "INCOME";
 
