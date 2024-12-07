@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     id("androidx.navigation.safeargs")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -47,4 +48,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation (libs.logging.interceptor)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
 }

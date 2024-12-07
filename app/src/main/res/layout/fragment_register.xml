@@ -65,6 +65,16 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="12dp" />
 
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/primaryRed"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:text="" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
