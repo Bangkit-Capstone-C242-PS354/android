@@ -100,6 +100,10 @@ public class ExpenseActivity extends AppCompatActivity {
                 binding.layoutReceipt.setVisibility(View.GONE);
             }
         });
+
+        expenseViewModel.uploadResult.observe(this, result -> {
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void setListeners() {
@@ -136,12 +140,11 @@ public class ExpenseActivity extends AppCompatActivity {
         });
 
         binding.btnSave.setOnClickListener(v -> {
-            if (expenseViewModel.selectedImageFile.getValue() == null) {
+            File file = expenseViewModel.selectedImageFile.getValue();
+            if (file == null) {
                 Toast.makeText(this, "Add receipt first!", Toast.LENGTH_SHORT).show();
             } else {
-                Intent iDetail = new Intent(ExpenseActivity.this, ExpenseDetailActivity.class);
-                iDetail.putExtra("EXTRA_FILE", expenseViewModel.selectedImageFile.getValue());
-                detailLauncher.launch(iDetail);
+                expenseViewModel.uploadReceipt(file);
             }
         });
     }
