@@ -22,6 +22,39 @@ public class Constants {
     public static final String TRANSACTION_TYPE_SUPPLIES = "SUPPLIES";
     public static final String TRANSACTION_TYPE_RENT = "RENT";
     public static final String TRANSACTION_TYPE_SERVICES = "SERVICES";
+    public static final String TRANSACTION_TYPE_MAINTENANCE = "MAINTENANCE";
+    public static final String TRANSACTION_TYPE_DEPRECIATION = "DEPRECIATION";
+    public static final String TRANSACTION_TYPE_LOAN_PAYMENT = "LOAN PAYMENT";
+    public static final String TRANSACTION_TYPE_REVENUES = "REVENUES";
+    public static final String TRANSACTION_TYPE_INTEREST = "INTEREST";
+    public static final String TRANSACTION_TYPE_RENTAL = "RENTAL";
+    public static final String TRANSACTION_TYPE_INVESTMENTS = "INVESTMENTS";
+    public static final String TRANSACTION_TYPE_SUBSIDIES = "SUBSIDIES";
+    public static final String TRANSACTION_TYPE_OTHERS = "OTHERS";
+
+    public static String[] expensesTypes = {
+            TRANSACTION_TYPE_PAYROLL,
+            TRANSACTION_TYPE_UTILITIES,
+            TRANSACTION_TYPE_INSURANCE,
+            TRANSACTION_TYPE_TRAVEL,
+            TRANSACTION_TYPE_MARKETING,
+            TRANSACTION_TYPE_SUPPLIES,
+            TRANSACTION_TYPE_RENT,
+            TRANSACTION_TYPE_SERVICES,
+            TRANSACTION_TYPE_MAINTENANCE,
+            TRANSACTION_TYPE_DEPRECIATION,
+            TRANSACTION_TYPE_LOAN_PAYMENT,
+            TRANSACTION_TYPE_OTHERS,
+    };
+
+    public static String[] incomeTypes = {
+            TRANSACTION_TYPE_REVENUES,
+            TRANSACTION_TYPE_INTEREST,
+            TRANSACTION_TYPE_RENTAL,
+            TRANSACTION_TYPE_INVESTMENTS,
+            TRANSACTION_TYPE_SUBSIDIES,
+            TRANSACTION_TYPE_OTHERS,
+    };
 
     public static final String FLAG_EXPENSE = "EXPENSE";
     public static final String FLAG_INCOME = "INCOME";

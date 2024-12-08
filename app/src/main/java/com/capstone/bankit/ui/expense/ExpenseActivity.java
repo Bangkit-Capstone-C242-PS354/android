@@ -1,5 +1,7 @@
 package com.capstone.bankit.ui.expense;
 
+import static com.capstone.bankit.utils.Constants.expensesTypes;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -13,8 +15,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -120,6 +122,14 @@ public class ExpenseActivity extends AppCompatActivity {
                     year, month, day);
             datePickerDialog.show();
         });
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                expensesTypes
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerCategory.setAdapter(adapter);
 
         binding.edReceipt.setOnClickListener(v -> {
             openReceiptBottomSheet();
