@@ -13,14 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.capstone.bankit.R;
 import com.capstone.bankit.data.api.ApiClient;
 import com.capstone.bankit.data.api.AuthService;
 import com.capstone.bankit.data.models.LoginRequest;
 import com.capstone.bankit.data.models.LoginResponse;
 import com.capstone.bankit.databinding.FragmentLoginBinding;
-import com.capstone.bankit.databinding.FragmentStarterBinding;
-import com.capstone.bankit.ui.auth.starter.StarterFragmentDirections;
 import com.capstone.bankit.ui.main.MainActivity;
 
 import retrofit2.Call;
