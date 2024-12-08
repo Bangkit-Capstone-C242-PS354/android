@@ -1,6 +1,8 @@
 package com.capstone.bankit.ui.auth.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,14 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.capstone.bankit.R;
 import com.capstone.bankit.data.api.ApiClient;
 import com.capstone.bankit.data.api.AuthService;
 import com.capstone.bankit.data.models.LoginRequest;
 import com.capstone.bankit.data.models.LoginResponse;
 import com.capstone.bankit.databinding.FragmentLoginBinding;
-import com.capstone.bankit.databinding.FragmentStarterBinding;
-import com.capstone.bankit.ui.auth.starter.StarterFragmentDirections;
 import com.capstone.bankit.ui.main.MainActivity;
 
 import retrofit2.Call;
@@ -79,17 +78,28 @@ public class LoginFragment extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
 
-                    if (loginResponse.getStatusCode() == 200) {
-                        // Login success: Navigate to MainActivity
-                        Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(requireActivity(), MainActivity.class));
-                        requireActivity().finish(); // Close the login activity
+                    if (loginResponse.getStatusCode() == 201) {
+                        // Ambil token dari respons
+                        LoginResponse.Data data = loginResponse.getData();
+                        if (data != null && data.getCustomToken() != null) {
+                            String customToken = data.getCustomToken();
+                            Toast.makeText(requireContext(), "Login successful with token!", Toast.LENGTH_SHORT).show();
+
+                            // Simpan token di SharedPreferences untuk otentikasi berikutnya
+                            saveToken(customToken);
+
+                            // Pindah ke MainActivity
+                            startActivity(new Intent(requireActivity(), MainActivity.class));
+                            requireActivity().finish();
+                        } else {
+                            Toast.makeText(requireContext(), "Login failed: Missing token in response", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        // Show error message from API
+                        // Status lain dianggap sebagai kegagalan
                         Toast.makeText(requireContext(), "Login failed: " + loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Show failure message if response is not successful
+                    // Jika respons tidak sukses
                     Toast.makeText(requireContext(), "Login failed: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -98,6 +108,13 @@ public class LoginFragment extends Fragment {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 // Handle failure scenario (e.g., no internet connection)
                 Toast.makeText(requireContext(), "Login failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            private void saveToken(String token) {
+                SharedPreferences sharedPreferences = requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("auth_token", token);
+                editor.apply();
             }
         });
     }
