@@ -31,24 +31,14 @@ public class LoginResponse {
     }
 
     public static class Data {
-        private String uid;
-        private String username;
+        private String customToken;
 
-        // Getters and setters
-        public String getUid() {
-            return uid;
+        public String getCustomToken() {
+            return customToken;
         }
 
-        public void setUid(String uid) {
-            this.uid = uid;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
+        public void setCustomToken(String customToken) {
+            this.customToken = customToken;
         }
     }
 }
