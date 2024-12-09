@@ -26,6 +26,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
@@ -67,10 +69,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void login(String email, String password) {
-        // Create the login request object
         LoginRequest loginRequest = new LoginRequest(email, password);
-
-        // Create Retrofit service and make the API call
         AuthService authService = ApiClient.getInstance().create(AuthService.class);
         authService.login(loginRequest).enqueue(new Callback<LoginResponse>() {
             @Override
@@ -79,43 +78,69 @@ public class LoginFragment extends Fragment {
                     LoginResponse loginResponse = response.body();
 
                     if (loginResponse.getStatusCode() == 201) {
-                        // Ambil token dari respons
                         LoginResponse.Data data = loginResponse.getData();
                         if (data != null && data.getCustomToken() != null) {
                             String customToken = data.getCustomToken();
-                            Toast.makeText(requireContext(), "Login successful with token!", Toast.LENGTH_SHORT).show();
-
-                            // Simpan token di SharedPreferences untuk otentikasi berikutnya
-                            saveToken(customToken);
-
-                            // Pindah ke MainActivity
-                            startActivity(new Intent(requireActivity(), MainActivity.class));
-                            requireActivity().finish();
+                            
+                            // Get Firebase Auth instance
+                            FirebaseAuth auth = FirebaseAuth.getInstance();
+                            
+                            // Sign in with custom token
+                            auth.signInWithCustomToken(customToken)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        // Get the Firebase ID token
+                                        auth.getCurrentUser().getIdToken(true)
+                                            .addOnCompleteListener(tokenTask -> {
+                                                if (tokenTask.isSuccessful()) {
+                                                    String idToken = tokenTask.getResult().getToken();
+                                                    // Log the JWT token
+                                                    System.out.println("JWT Token: " + idToken);
+                                                    
+                                                    // Save token in SharedPreferences
+                                                    saveToken(idToken);
+                                                    
+                                                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show();
+                                                    
+                                                    // Navigate to MainActivity
+                                                    startActivity(new Intent(requireActivity(), MainActivity.class));
+                                                    requireActivity().finish();
+                                                } else {
+                                                    // Handle error in getting ID token
+                                                    Toast.makeText(requireContext(), 
+                                                        "Failed to get ID token: " + tokenTask.getException().getMessage(), 
+                                                        Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                    } else {
+                                        // Handle Firebase Auth error
+                                        Toast.makeText(requireContext(), 
+                                            "Firebase Auth failed: " + task.getException().getMessage(), 
+                                            Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         } else {
                             Toast.makeText(requireContext(), "Login failed: Missing token in response", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        // Status lain dianggap sebagai kegagalan
                         Toast.makeText(requireContext(), "Login failed: " + loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Jika respons tidak sukses
                     Toast.makeText(requireContext(), "Login failed: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                // Handle failure scenario (e.g., no internet connection)
                 Toast.makeText(requireContext(), "Login failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
-
-            private void saveToken(String token) {
-                SharedPreferences sharedPreferences = requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("auth_token", token);
-                editor.apply();
-            }
         });
+    }
+
+    private void saveToken(String token) {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("auth_token", token);
+        editor.apply();
     }
 }
