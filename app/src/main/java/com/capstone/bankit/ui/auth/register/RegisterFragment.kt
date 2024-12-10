@@ -66,7 +66,11 @@ class RegisterFragment : Fragment() {
         }
 
         // Step 3: Create the request object
-        val registerRequest = RegisterRequest(username, email, password)
+        val registerRequest = RegisterRequest(
+            username = username,
+            email = email,
+            password = password
+        )
 
         // Step 4: Create Retrofit service and make the API call
         val authService = ApiConfig.getApiService()
@@ -79,33 +83,57 @@ class RegisterFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val registerResponse = response.body()
 
-                    // Step 5: Handle the successful response
                     if (registerResponse?.statusCode == 201) {
                         val successMessage = "Registration successful!"
                         binding.tvError.text = successMessage
                         binding.tvError.setTextColor(resources.getColor(R.color.primaryGreen))
                         binding.tvError.visibility = View.VISIBLE
 
-                        // Navigate to login screen after successful registration
-                        val action =
-                            RegisterFragmentDirections.actionNavigationRegisterToNavigationLogin()
+                        val action = RegisterFragmentDirections.actionNavigationRegisterToNavigationLogin()
                         findNavController(binding.root).navigate(action)
                     } else {
-                        // Show error message from the response
-                        binding.tvError.text = "Error: " + registerResponse?.message
-                        binding.tvError.visibility = View.VISIBLE
+                        showError(registerResponse?.message ?: "Unknown error occurred")
                     }
                 } else {
-                    // Handle API failure or unsuccessful response
-                    binding.tvError.text = "Registration failed: " + response.message()
-                    binding.tvError.visibility = View.VISIBLE
+                    try {
+                        val errorBody = response.errorBody()?.string()
+                        if (!errorBody.isNullOrEmpty()) {
+                            if (errorBody.contains("message")) {
+                                // Check if message is an array
+                                if (errorBody.contains("message\":[")) {
+                                    // Handle array of messages
+                                    val messages = errorBody.substringAfter("message\":[")
+                                        .substringBefore("]")
+                                        .split(",")
+                                        .map { it.trim('"') }
+                                        .joinToString("\n") // Join messages with newline
+                                    showError(messages)
+                                } else {
+                                    // Handle single message
+                                    val message = errorBody.substringAfter("message\":\"")
+                                        .substringBefore("\"")
+                                        .replace("\\", "")
+                                    showError(message)
+                                }
+                            } else {
+                                showError("Registration failed")
+                            }
+                        } else {
+                            showError("Registration failed")
+                        }
+                    } catch (e: Exception) {
+                        showError("Registration failed")
+                    }
                 }
             }
 
             @SuppressLint("SetTextI18n")
             override fun onFailure(call: Call<RegisterResponse?>, t: Throwable) {
-                // Handle network failure or other issues
-                binding.tvError.text = "An error occurred: " + t.message
+                showError("Network error occurred")
+            }
+
+            private fun showError(message: String) {
+                binding.tvError.text = message
                 binding.tvError.visibility = View.VISIBLE
             }
         })

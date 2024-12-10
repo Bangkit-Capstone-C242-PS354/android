@@ -102,57 +102,48 @@ class LoginFragment : Fragment() {
                 call: Call<LoginResponse?>,
                 response: Response<LoginResponse?>,
             ) {
-                // Hide ProgressBar and enable login button
                 binding.btnLogin.isEnabled = true
 
                 if (response.isSuccessful && response.body() != null) {
                     val loginResponse = response.body()
 
                     if (loginResponse!!.statusCode == 201) {
-                        // Retrieve token from response
                         val data = loginResponse.data
                         if (data?.customToken != null) {
-                            val customToken: String = data.customToken
-                            Toast.makeText(
-                                requireContext(),
-                                "Login successful! Authenticating with Firebase...",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            // Sign in to Firebase with the custom token
-                            signInWithCustomToken(customToken)
+                            binding.tvError.visibility = View.GONE
+                            signInWithCustomToken(data.customToken)
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Login failed: Missing token in response",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showError("Login failed: Missing token")
                         }
                     } else {
-                        // Other status codes are considered as failure
-                        Toast.makeText(
-                            requireContext(),
-                            "Login failed: " + loginResponse.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showError(loginResponse.message ?: "Unknown error occurred")
                     }
                 } else {
-                    // If response is not successful
-                    Toast.makeText(
-                        requireContext(),
-                        "Login failed: " + response.message(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    try {
+                        val errorBody = response.errorBody()?.string()
+                        if (!errorBody.isNullOrEmpty()) {
+                            // Parse the error message from the JSON response
+                            if (errorBody.contains("message")) {
+                                // Extract just the message part from the error response
+                                val message = errorBody.substringAfter("message\":\"")
+                                    .substringBefore("\"")
+                                    .replace("\\", "")
+                                showError(message)
+                            } else {
+                                showError("Login failed")
+                            }
+                        } else {
+                            showError("Login failed")
+                        }
+                    } catch (e: Exception) {
+                        showError("Login failed")
+                    }
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-                // Hide ProgressBar and enable login button
                 binding.btnLogin.isEnabled = true
-
-                // Handle failure scenario (e.g., no internet connection)
-                Toast.makeText(requireContext(), "Login failed: " + t.message, Toast.LENGTH_SHORT)
-                    .show()
+                showError("Network error occurred")
             }
 
             private fun signInWithCustomToken(customToken: String) {
@@ -202,6 +193,11 @@ class LoginFragment : Fragment() {
                             Toast.makeText(requireContext(), "Firebase Authentication Failed: " + task.exception!!.message, Toast.LENGTH_SHORT).show()
                         }
                     }
+            }
+
+            private fun showError(message: String) {
+                binding.tvError.text = message
+                binding.tvError.visibility = View.VISIBLE
             }
         })
     }
