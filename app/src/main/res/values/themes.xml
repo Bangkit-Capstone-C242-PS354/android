@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Base.Theme.BankIT" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryBlue</item>
+        <item name="android:statusBarColor">@color/primaryBlue</item>
+    </style>
+
+    <style name="Theme.BankIT.Auth" parent="Base.Theme.BankIT">
+        <item name="android:statusBarColor">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1013191609743",
+    "project_id": "bangkit-capstone-bankit",
+    "storage_bucket": "bangkit-capstone-bankit.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013191609743:android:624894e791d9eb63600ffa",
+        "android_client_info": {
+          "package_name": "com.capstone.bankit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp30IA4Gvv-LoylCA1SYxys2S1ifYb9yE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
