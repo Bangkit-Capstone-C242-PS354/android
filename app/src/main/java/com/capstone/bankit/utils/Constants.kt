@@ -42,6 +42,15 @@ object Constants {
         TRANSACTION_TYPE_OTHERS
     )
 
+    val paymentMethods = arrayOf(
+        "Cash",
+        "Debit Card",
+        "Credit Card",
+        "Bank Transfer",
+        "E-Wallet",
+        "Other"
+    )
+
     val incomeTypes = arrayOf(
         TRANSACTION_TYPE_REVENUES,
         TRANSACTION_TYPE_INTEREST,

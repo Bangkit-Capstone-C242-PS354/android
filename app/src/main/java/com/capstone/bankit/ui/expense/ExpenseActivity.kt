@@ -30,8 +30,7 @@ import com.capstone.bankit.data.models.ExpenseRequest
 import com.capstone.bankit.databinding.ActivityExpenseBinding
 import com.capstone.bankit.ui.customview.ReceiptBottomSheetFragment
 import com.capstone.bankit.ui.expensedetail.ExpenseDetailActivity
-import com.capstone.bankit.utils.Constants.convertFormatDate
-import com.capstone.bankit.utils.Constants.expensesTypes
+import com.capstone.bankit.utils.Constants
 import com.capstone.bankit.utils.TokenManager
 import com.capstone.bankit.utils.ViewModelFactory
 import java.io.ByteArrayOutputStream
@@ -151,26 +150,31 @@ class ExpenseActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
-            expensesTypes
+            Constants.expensesTypes
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategory.adapter = adapter
+
+        val paymentMethodAdapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            Constants.paymentMethods
+        )
+        paymentMethodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerPaymentMethod.adapter = paymentMethodAdapter
 
         binding.edReceipt.setOnClickListener {
             openReceiptBottomSheet()
         }
 
         binding.btnAutoSave.setOnClickListener {
-
             val title = binding.edTitle.text.toString()
             val date = binding.edDate.text.toString()
-            val dateFormatted = convertFormatDate(date)
-//            val amount = binding.edAmount.text.toString().toInt()
+            val dateFormatted = Constants.convertFormatDate(date)
             val category = binding.spinnerCategory.selectedItem.toString()
-//            val note = binding.edNote.text.toString()
 
             if (title.isEmpty() || date.isEmpty() || category.isEmpty()) {
-                Toast.makeText(this, "Fill the title, data, and category!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Fill the title, date, and category!", Toast.LENGTH_SHORT).show()
             } else if (imagePath.isNullOrEmpty()) {
                 Toast.makeText(this, "Upload the receipt first, before process it", Toast.LENGTH_SHORT).show()
             } else {
@@ -190,6 +194,8 @@ class ExpenseActivity : AppCompatActivity() {
                                     title = title,
                                     date = dateFormatted,
                                     amount = response.data?.extractedData?.totalValue,
+                                    tax = response.data?.extractedData?.taxValue,
+                                    paymentMethod = response.data?.extractedData?.paymentMethod,
                                     category = category,
                                     receipt = imageUrl,
                                     note = "Set automatically by the AI"
@@ -216,10 +222,12 @@ class ExpenseActivity : AppCompatActivity() {
             } else {
                 val title = binding.edTitle.text.toString()
                 val date = binding.edDate.text.toString()
-                val dateFormatted = convertFormatDate(date)
+                val dateFormatted = Constants.convertFormatDate(date)
                 val amount = binding.edAmount.text.toString().toInt()
                 val category = binding.spinnerCategory.selectedItem.toString()
                 val note = binding.edNote.text.toString()
+                val tax = binding.edTax.text.toString().toDoubleOrNull() ?: 0.0
+                val paymentMethod = binding.spinnerPaymentMethod.selectedItem.toString()
                 if (title.isEmpty() || date.isEmpty() || category.isEmpty() || note.isEmpty()) {
                     Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show()
                 } else {
@@ -227,6 +235,8 @@ class ExpenseActivity : AppCompatActivity() {
                         title = title,
                         date = dateFormatted,
                         amount = amount,
+                        tax = tax,
+                        paymentMethod = paymentMethod,
                         category = category,
                         receipt = imageUrl,
                         note = note

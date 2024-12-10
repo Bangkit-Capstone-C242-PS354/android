@@ -44,5 +44,11 @@ data class DataExpensePost(
 	val userId: String? = null,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: UpdatedAt? = null
+	val updatedAt: UpdatedAt? = null,
+
+	@field:SerializedName("tax")
+	val tax: Double? = null,
+
+	@field:SerializedName("paymentMethod")
+	val paymentMethod: String? = null
 )

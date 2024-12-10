@@ -67,4 +67,6 @@
     <string name="processing_message">Processing Message</string>
     <string name="cancel">Cancel</string>
     <string name="loading">Loading Data</string>
+    <string name="tax_amount">Tax Amount</string>
+    <string name="payment_method">Payment Method</string>
 </resources>

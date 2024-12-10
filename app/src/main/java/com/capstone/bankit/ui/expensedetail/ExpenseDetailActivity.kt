@@ -56,11 +56,13 @@ class ExpenseDetailActivity : AppCompatActivity() {
         )
 
         expenseViewModel.expenseDetail.observe(this) { expense ->
-            binding.tvDate.text = expense.data?.date
-            binding.tvNote.text = expense.data?.note
             binding.tvTitle.text = expense.data?.title
+            binding.tvDate.text = expense.data?.date
             binding.tvCategory.text = expense.data?.category
-            binding.tvAmount.text = Constants.formatToRupiah(expense.data?.amount ?: 0.0)
+            binding.tvNote.text = expense.data?.note
+            binding.tvTotalAmount.text = Constants.formatToRupiah(expense.data?.amount ?: 0.0)
+            binding.tvTaxAmount.text = Constants.formatToRupiah(expense.data?.tax ?: 0.0)
+            binding.tvPaymentMethodValue.text = expense.data?.paymentMethod
             if (navigate != "INCOME"){
                 val receiptUrl = expense.data?.receipt
 

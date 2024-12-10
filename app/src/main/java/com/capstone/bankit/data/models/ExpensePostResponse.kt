@@ -53,7 +53,13 @@ data class Data(
 	val userId: String? = null,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: UpdatedAt? = null
+	val updatedAt: UpdatedAt? = null,
+
+	@field:SerializedName("tax_value")
+	val tax: Any? = null,
+
+	@field:SerializedName("payment_method")
+	val paymentMethod: Any? = null
 )
 
 data class CreatedAt(

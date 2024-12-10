@@ -93,6 +93,18 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="12dp" />
 
+        <EditText
+            android:id="@+id/ed_tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/background_form"
+            android:hint="Tax Amount"
+            android:inputType="numberDecimal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="12dp" />
+
         <Spinner
             android:id="@+id/spinner_category"
             android:layout_width="match_parent"
@@ -103,6 +115,15 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="12dp" />
 
+        <Spinner
+            android:id="@+id/spinner_payment_method"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/background_form"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="12dp" />
 
         <EditText
             android:id="@+id/ed_note"
