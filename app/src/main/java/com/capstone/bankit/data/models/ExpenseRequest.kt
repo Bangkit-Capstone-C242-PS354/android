@@ -18,8 +18,8 @@ data class ExpenseRequest(
     @field:SerializedName("paymentMethod")
     val paymentMethod: Any? = null,
 
-    @field:SerializedName("receipt")
-    val receipt: String? = null,
+    @field:SerializedName("receiptUrl")
+    val receiptUrl: String? = null,
 
     @field:SerializedName("title")
     val title: String? = null,

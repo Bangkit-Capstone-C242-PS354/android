@@ -46,6 +46,6 @@ data class DataItem(
 	@field:SerializedName("note")
 	val note: String? = null,
 
-	@field:SerializedName("receipt")
-	val receipt: String? = null
+	@field:SerializedName("receiptUrl")
+	val receiptUrl: String? = null
 )

@@ -64,7 +64,7 @@ class ExpenseDetailActivity : AppCompatActivity() {
             binding.tvTaxAmount.text = Constants.formatToRupiah(expense.data?.tax ?: 0.0)
             binding.tvPaymentMethodValue.text = expense.data?.paymentMethod
             if (navigate != "INCOME"){
-                val receiptUrl = expense.data?.receipt
+                val receiptUrl = expense.data?.receiptUrl
 
                 Glide.with(this)
                     .load(receiptUrl)

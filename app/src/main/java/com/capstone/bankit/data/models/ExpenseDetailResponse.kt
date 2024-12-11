@@ -28,8 +28,8 @@ data class DataExpensePost(
 	@field:SerializedName("amount")
 	val amount: Double? = null,
 
-	@field:SerializedName("receipt")
-	val receipt: String? = null,
+	@field:SerializedName("receiptUrl")
+	val receiptUrl: String? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,

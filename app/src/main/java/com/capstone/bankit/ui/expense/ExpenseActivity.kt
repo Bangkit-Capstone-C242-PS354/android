@@ -197,7 +197,7 @@ class ExpenseActivity : AppCompatActivity() {
                                     tax = response.data?.extractedData?.taxValue,
                                     paymentMethod = response.data?.extractedData?.paymentMethod,
                                     category = category,
-                                    receipt = imageUrl,
+                                    receiptUrl = imageUrl,
                                     note = "Set automatically by the AI"
                                 ),
                                 onFailure = {
@@ -238,7 +238,7 @@ class ExpenseActivity : AppCompatActivity() {
                         tax = tax,
                         paymentMethod = paymentMethod,
                         category = category,
-                        receipt = imageUrl,
+                        receiptUrl = imageUrl,
                         note = note
                     )
                     expenseViewModel.postExpense(
