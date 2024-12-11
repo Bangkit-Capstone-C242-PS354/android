@@ -165,11 +165,8 @@ class AnalyticsFragment : Fragment() {
         binding!!.btnExport.setOnClickListener {
             checkAndRequestPermissions()
             
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // For Android 10 and above, use MediaStore
                 analyticsViewModel.exportTransactions(
                     token = "Bearer $token",
                     onSuccess = { file ->
@@ -180,9 +177,38 @@ class AnalyticsFragment : Fragment() {
                         ).show()
                     },
                     onFailure = { message ->
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        Log.e("AnalyticsFragment", "Export failed: $message")
+                        Toast.makeText(requireContext(), "Export failed: $message", Toast.LENGTH_LONG).show()
                     }
                 )
+            } else {
+                // For older Android versions, check storage permission
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    analyticsViewModel.exportTransactions(
+                        token = "Bearer $token",
+                        onSuccess = { file ->
+                            Toast.makeText(
+                                requireContext(),
+                                "File exported successfully to Downloads folder: ${file.name}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        },
+                        onFailure = { message ->
+                            Log.e("AnalyticsFragment", "Export failed: $message")
+                            Toast.makeText(requireContext(), "Export failed: $message", Toast.LENGTH_LONG).show()
+                        }
+                    )
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Storage permission is required to export files",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }

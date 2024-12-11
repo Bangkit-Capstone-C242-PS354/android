@@ -3,8 +3,10 @@ package com.capstone.bankit.ui.main.analytics
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.ContentValues
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -51,7 +53,7 @@ class AnalyticsViewModel(
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("Download Complete")
-            .setContentText("Transaction data exported to $fileName")
+            .setContentText("Transaction Data Downloaded")
             .setSmallIcon(R.drawable.ic_download)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
@@ -69,25 +71,50 @@ class AnalyticsViewModel(
             try {
                 val response = bankitRepository.exportTransactions(token)
                 
-                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                if (!downloadsDir.exists()) {
-                    downloadsDir.mkdirs()
-                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    // Use MediaStore for Android 10+
+                    val contentValues = ContentValues().apply {
+                        put(MediaStore.Downloads.DISPLAY_NAME, "transactions_${System.currentTimeMillis()}.xlsx")
+                        put(MediaStore.Downloads.MIME_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    }
 
-                val fileName = "transactions_${System.currentTimeMillis()}.xlsx"
-                val file = File(downloadsDir, fileName)
+                    val resolver = context.contentResolver
+                    val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
 
-                withContext(Dispatchers.IO) {
-                    response.byteStream().use { input ->
-                        file.outputStream().use { output ->
-                            input.copyTo(output)
+                    uri?.let {
+                        resolver.openOutputStream(it)?.use { outputStream ->
+                            response.byteStream().use { input ->
+                                input.copyTo(outputStream)
+                            }
+                        }
+                        
+                        val file = File(uri.path ?: "")
+                        showDownloadNotification(file.name)
+                        onSuccess(file)
+                    } ?: onFailure("Failed to create file")
+                } else {
+                    // Legacy approach for older Android versions
+                    val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    if (!downloadsDir.exists()) {
+                        downloadsDir.mkdirs()
+                    }
+
+                    val fileName = "transactions_${System.currentTimeMillis()}.xlsx"
+                    val file = File(downloadsDir, fileName)
+
+                    withContext(Dispatchers.IO) {
+                        response.byteStream().use { input ->
+                            file.outputStream().use { output ->
+                                input.copyTo(output)
+                            }
                         }
                     }
+                    
+                    showDownloadNotification(fileName)
+                    onSuccess(file)
                 }
-                
-                showDownloadNotification(fileName)
-                onSuccess(file)
             } catch (e: Exception) {
+                Log.e("AnalyticsViewModel", "Export error: ${e.message}", e)
                 onFailure(e.message ?: "Failed to export transactions")
             }
         }
