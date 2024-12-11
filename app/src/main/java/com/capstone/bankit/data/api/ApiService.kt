@@ -18,6 +18,7 @@ import com.capstone.bankit.data.models.UpdateUserRequest
 import com.capstone.bankit.data.models.UpdateUserResponse
 import com.capstone.bankit.data.models.UserResponse
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -28,6 +29,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 import java.io.File
 
 interface ApiService {
@@ -117,4 +119,10 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("filename") filename: String
     ): ReceiptCheckResponse
+
+    @Streaming
+    @GET("/transactions/export")
+    suspend fun exportTransactions(
+        @Header("Authorization") token: String
+    ): ResponseBody
 }

@@ -1,6 +1,7 @@
 package com.capstone.bankit.data.repository
 
 import com.capstone.bankit.data.api.ApiService
+import com.capstone.bankit.data.api.ApiConfig
 import com.capstone.bankit.data.models.ExpenseDetailResponse
 import com.capstone.bankit.data.models.ExpensePostResponse
 import com.capstone.bankit.data.models.ExpenseRequest
@@ -17,8 +18,11 @@ import com.capstone.bankit.data.models.UserResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
-class BankitRepository(private val apiService: ApiService) {
+class BankitRepository(
+    private val apiService: ApiService
+) {
 
     /**
      * Fetches all expenses.
@@ -157,6 +161,12 @@ class BankitRepository(private val apiService: ApiService) {
     ): ReceiptCheckResponse {
         return withContext(Dispatchers.IO) {
             apiService.checkReceipt(token, filename)
+        }
+    }
+
+    suspend fun exportTransactions(token: String): ResponseBody {
+        return withContext(Dispatchers.IO) {
+            apiService.exportTransactions(token)
         }
     }
 }

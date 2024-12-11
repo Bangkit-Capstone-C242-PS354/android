@@ -1,12 +1,14 @@
 package com.capstone.bankit.ui.main.analytics
 
-import android.content.res.ColorStateList
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
@@ -26,6 +28,8 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.content.res.ColorStateList
+import android.os.Build
 
 class AnalyticsFragment : Fragment() {
     private var binding: FragmentAnalyticsBinding? = null
@@ -113,7 +117,6 @@ class AnalyticsFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.primaryBlue)
                 )
 
-                // Update the view with income data when the income tab is selected
                 updateAnalyticsView(income, Constants.FLAG_INCOME)
             } else {
                 binding!!.btnIncomeTab.backgroundTintList = ColorStateList.valueOf(
@@ -129,7 +132,6 @@ class AnalyticsFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.white)
                 )
 
-                // Update the view with expense data when the expense tab is selected
                 updateAnalyticsView(expense, Constants.FLAG_EXPENSE)
             }
         }
@@ -157,6 +159,30 @@ class AnalyticsFragment : Fragment() {
             if (analyticsViewModel.tabFlag.value != 2) {
                 analyticsViewModel.tabFlag.postValue(2)
                 updateAnalyticsView(expense, Constants.FLAG_EXPENSE)
+            }
+        }
+
+        binding!!.btnExport.setOnClickListener {
+            checkAndRequestPermissions()
+            
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                analyticsViewModel.exportTransactions(
+                    token = "Bearer $token",
+                    onSuccess = { file ->
+                        Toast.makeText(
+                            requireContext(),
+                            "File exported successfully to Downloads folder: ${file.name}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    },
+                    onFailure = { message ->
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
     }
@@ -243,5 +269,32 @@ class AnalyticsFragment : Fragment() {
         }
 
         datePicker.show(parentFragmentManager, "DATE_PICKER")
+    }
+
+    private fun checkAndRequestPermissions() {
+        val permissions = mutableListOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        
+        // Add notification permission for Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        val permissionsToRequest = permissions.filter {
+            ContextCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionsToRequest.toTypedArray(),
+                STORAGE_PERMISSION_CODE
+            )
+        }
+    }
+
+    companion object {
+        private const val STORAGE_PERMISSION_CODE = 100
     }
 }

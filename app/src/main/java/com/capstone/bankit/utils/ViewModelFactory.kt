@@ -8,6 +8,7 @@ import com.capstone.bankit.ui.editprofile.ProfileViewModel
 import com.capstone.bankit.ui.expense.ExpenseViewModel
 import com.capstone.bankit.ui.income.IncomeViewModel
 import com.capstone.bankit.ui.main.analytics.AnalyticsViewModel
+import com.capstone.bankit.data.repository.BankitRepository
 import com.capstone.bankit.ui.main.home.HomeViewModel
 
 @Suppress("UNCHECKED_CAST")
@@ -15,31 +16,34 @@ class ViewModelFactory(
     private val context: Context
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(
-                Injection.provideRepository(context)
-            ) as T
+        return when {
+            modelClass.isAssignableFrom(AnalyticsViewModel::class.java) -> {
+                AnalyticsViewModel(
+                    Injection.provideRepository(context),
+                    context
+                ) as T
+            }
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
+                HomeViewModel(
+                    Injection.provideRepository(context)
+                ) as T
+            }
+            modelClass.isAssignableFrom(ExpenseViewModel::class.java) -> {
+                ExpenseViewModel(
+                    Injection.provideRepository(context)
+                ) as T
+            }
+            modelClass.isAssignableFrom(IncomeViewModel::class.java) -> {
+                IncomeViewModel(
+                    Injection.provideRepository(context)
+                ) as T
+            }
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
+                ProfileViewModel(
+                    Injection.provideRepository(context)
+                ) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
-        if (modelClass.isAssignableFrom(ExpenseViewModel::class.java)) {
-            return ExpenseViewModel(
-                Injection.provideRepository(context)
-            ) as T
-        }
-        if (modelClass.isAssignableFrom(IncomeViewModel::class.java)) {
-            return IncomeViewModel(
-                Injection.provideRepository(context)
-            ) as T
-        }
-        if (modelClass.isAssignableFrom(AnalyticsViewModel::class.java)) {
-            return AnalyticsViewModel(
-                Injection.provideRepository(context)
-            ) as T
-        }
-        if (modelClass.isAssignableFrom(ProfileViewModel::class.java)) {
-            return ProfileViewModel(
-                Injection.provideRepository(context)
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
