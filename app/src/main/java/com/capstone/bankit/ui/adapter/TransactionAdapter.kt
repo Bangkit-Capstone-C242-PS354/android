@@ -3,6 +3,7 @@ package com.capstone.bankit.ui.adapter
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -78,8 +79,8 @@ class TransactionAdapter(private var tabFlag: Int) : ListAdapter<DataItem, Trans
                 }
             }
 
-
-            holder.binding.btnDetail.setOnClickListener { view ->
+            // Make the entire row clickable
+            val onClickListener = View.OnClickListener { view ->
                 val context = view.context
                 // Check both the item type and the current tab flag
                 val intent = if (expenseItem.type == "EXPENSE" || tabFlag == 2) {
@@ -93,6 +94,10 @@ class TransactionAdapter(private var tabFlag: Int) : ListAdapter<DataItem, Trans
                 }
                 context.startActivity(intent)
             }
+
+            // Set click listener for both the entire row and the detail button
+            holder.binding.root.setOnClickListener(onClickListener)
+            holder.binding.btnDetail.setOnClickListener(onClickListener)
         }
     }
 
