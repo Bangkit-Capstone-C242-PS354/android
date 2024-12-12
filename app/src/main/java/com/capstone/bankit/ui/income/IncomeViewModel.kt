@@ -10,11 +10,16 @@ import com.capstone.bankit.data.models.IncomeRequest
 import com.capstone.bankit.data.repository.BankitRepository
 import com.capstone.bankit.ui.main.home.HomeViewModel.Companion.TAG
 import kotlinx.coroutines.launch
+import java.io.IOException
+import com.capstone.bankit.data.models.IncomeDetailResponse
 
 class IncomeViewModel(private val bankitRepository: BankitRepository): ViewModel() {
 
     private val _expenses = MutableLiveData<IncomePostResponse>()
     val expenses: LiveData<IncomePostResponse> = _expenses
+
+    private val _incomeDetail = MutableLiveData<IncomeDetailResponse>()
+    val incomeDetail: LiveData<IncomeDetailResponse> = _incomeDetail
 
     fun postIncome(
         token: String,
@@ -35,6 +40,25 @@ class IncomeViewModel(private val bankitRepository: BankitRepository): ViewModel
                 onLoading(false)
                 onFailure(e.message.toString())
                 Log.e(TAG, "getExpense: ${e.message}", )
+            }
+        }
+    }
+
+    fun getIncomeDetail(
+        token: String,
+        incomeId: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ){
+        viewModelScope.launch {
+            try {
+                val response = bankitRepository.getIncomeDetail(token, incomeId)
+                _incomeDetail.value = response
+                onSuccess()
+            } catch (e: IOException) {
+                onFailure(e.message.toString())
+            } catch (e: Exception) {
+                onFailure(e.message.toString())
             }
         }
     }

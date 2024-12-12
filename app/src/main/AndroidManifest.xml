@@ -56,6 +56,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.incomedetail.IncomeDetailActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

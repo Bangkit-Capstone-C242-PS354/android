@@ -17,6 +17,7 @@ import com.capstone.bankit.data.models.UpdateUserResponse
 import com.capstone.bankit.data.models.UserResponse
 import com.capstone.bankit.data.models.ChatRequest
 import com.capstone.bankit.data.models.ChatResponse
+import com.capstone.bankit.data.models.IncomeDetailResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
@@ -174,5 +175,14 @@ class BankitRepository(
 
     suspend fun chat(token: String, chatRequest: ChatRequest): ChatResponse {
         return apiService.chat(token, chatRequest)
+    }
+
+    suspend fun getIncomeDetail(
+        token: String,
+        incomeId: String
+    ): IncomeDetailResponse {
+        return withContext(Dispatchers.IO) {
+            apiService.getIncomeDetail(token, incomeId)
+        }
     }
 }

@@ -70,4 +70,5 @@
     <string name="tax_amount">Tax Amount</string>
     <string name="payment_method">Payment Method</string>
     <string name="title_chatbot">Chatbot</string>
+    <string name="income_detail">Income Detail</string>
 </resources>

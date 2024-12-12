@@ -19,6 +19,7 @@ import com.capstone.bankit.data.models.UpdateUserResponse
 import com.capstone.bankit.data.models.UserResponse
 import com.capstone.bankit.data.models.ChatRequest
 import com.capstone.bankit.data.models.ChatResponse
+import com.capstone.bankit.data.models.IncomeDetailResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -133,4 +134,10 @@ interface ApiService {
     @Header("Authorization") token: String,
     @Body chatRequest: ChatRequest
 ): ChatResponse
+
+    @GET("/incomes/{id}")
+    suspend fun getIncomeDetail(
+        @Header("Authorization") token: String,
+        @Path("id") incomeId: String
+    ): IncomeDetailResponse
 }

@@ -12,6 +12,7 @@ import com.capstone.bankit.R
 import com.capstone.bankit.data.models.DataItem
 import com.capstone.bankit.databinding.ItemTransactionsRowBinding
 import com.capstone.bankit.ui.expensedetail.ExpenseDetailActivity
+import com.capstone.bankit.ui.incomedetail.IncomeDetailActivity
 import com.capstone.bankit.utils.Constants.convertDate
 import com.capstone.bankit.utils.Constants.convertLongToDate
 import com.capstone.bankit.utils.Constants.formatToRupiah
@@ -80,10 +81,14 @@ class TransactionAdapter(private var tabFlag: Int) : ListAdapter<DataItem, Trans
 
             holder.binding.btnDetail.setOnClickListener { view ->
                 val context = view.context
-                val intent = Intent(context, ExpenseDetailActivity::class.java).apply {
-                    putExtra("expenseId", expenseItem.id)
-                    if (tabFlag != 2 && expenseItem.type != "EXPENSE"){
-                        putExtra("navigate", "INCOME")
+                // Check both the item type and the current tab flag
+                val intent = if (expenseItem.type == "EXPENSE" || tabFlag == 2) {
+                    Intent(context, ExpenseDetailActivity::class.java).apply {
+                        putExtra("expenseId", expenseItem.id)
+                    }
+                } else {
+                    Intent(context, IncomeDetailActivity::class.java).apply {
+                        putExtra("incomeId", expenseItem.id)
                     }
                 }
                 context.startActivity(intent)
