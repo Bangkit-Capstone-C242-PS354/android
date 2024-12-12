@@ -17,6 +17,8 @@ import com.capstone.bankit.data.models.TransactionResponse
 import com.capstone.bankit.data.models.UpdateUserRequest
 import com.capstone.bankit.data.models.UpdateUserResponse
 import com.capstone.bankit.data.models.UserResponse
+import com.capstone.bankit.data.models.ChatRequest
+import com.capstone.bankit.data.models.ChatResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -125,4 +127,10 @@ interface ApiService {
     suspend fun exportTransactions(
         @Header("Authorization") token: String
     ): ResponseBody
+
+    @POST("/chatbot/chat")
+    suspend fun chat(
+    @Header("Authorization") token: String,
+    @Body chatRequest: ChatRequest
+): ChatResponse
 }

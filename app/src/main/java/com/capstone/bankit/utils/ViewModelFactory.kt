@@ -10,6 +10,7 @@ import com.capstone.bankit.ui.income.IncomeViewModel
 import com.capstone.bankit.ui.main.analytics.AnalyticsViewModel
 import com.capstone.bankit.data.repository.BankitRepository
 import com.capstone.bankit.ui.main.home.HomeViewModel
+import com.capstone.bankit.ui.main.chatbot.ChatbotViewModel
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
@@ -40,6 +41,11 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> {
                 ProfileViewModel(
+                    Injection.provideRepository(context)
+                ) as T
+            }
+            modelClass.isAssignableFrom(ChatbotViewModel::class.java) -> {
+                ChatbotViewModel(
                     Injection.provideRepository(context)
                 ) as T
             }

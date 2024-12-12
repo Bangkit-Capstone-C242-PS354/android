@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_analytics" />
 
     <fragment
+        android:id="@+id/navigation_chatbot"
+        android:name="com.capstone.bankit.ui.main.chatbot.ChatbotFragment"
+        android:label="@string/title_chatbot"
+        tools:layout="@layout/fragment_chatbot" />
+
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.capstone.bankit.ui.main.profile.ProfileFragment"
         android:label="@string/title_profile"

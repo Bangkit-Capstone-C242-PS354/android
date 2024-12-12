@@ -15,6 +15,8 @@ import com.capstone.bankit.data.models.TransactionResponse
 import com.capstone.bankit.data.models.UpdateUserRequest
 import com.capstone.bankit.data.models.UpdateUserResponse
 import com.capstone.bankit.data.models.UserResponse
+import com.capstone.bankit.data.models.ChatRequest
+import com.capstone.bankit.data.models.ChatResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
@@ -168,5 +170,9 @@ class BankitRepository(
         return withContext(Dispatchers.IO) {
             apiService.exportTransactions(token)
         }
+    }
+
+    suspend fun chat(token: String, chatRequest: ChatRequest): ChatResponse {
+        return apiService.chat(token, chatRequest)
     }
 }
